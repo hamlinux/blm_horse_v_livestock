@@ -48,7 +48,8 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 # Raw Data Files
-data
+*.csv
+*.tsv
 
 # Cached data
 cache
