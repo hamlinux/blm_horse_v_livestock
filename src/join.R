@@ -16,4 +16,4 @@ blm_df %>%
   geom_col(aes(y = total_gis_miles, fill = total_gis_miles)) +
   geom_col(aes(y = total_hb_miles, colour = total_hb_miles)) +
   labs(x = "Administrative State", y = "Managed Sq. Miles",  title = " Bureau Of Land Management Livestock Grazing v. Wild Horse/Burro Management") 
-ggsave("graphs/grazing_v_wildhorse.png")
+qgsave("graphs/grazing_v_wildhorse.png")
