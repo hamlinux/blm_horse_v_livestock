@@ -1,5 +1,10 @@
+# Join HML and Grazing Datasets by State
 blm_df <- blm_graze_df %>%
   left_join(blm_hb_df, by = "admin_st")
+
+blm_df
+
+
 
 blm_df %>%
   filter(!admin_st == "" & !admin_st == " ") %>%

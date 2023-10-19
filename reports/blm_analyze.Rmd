@@ -1,0 +1,91 @@
+---
+title:  BLM  HMA and Grazing Analysis
+author: Thomas L. Willis
+output: html_document
+---
+
+## Comparative Analysis of the Bureau of Land Managements Wild Horse/Burro and Grazing Programs
+
+Boxplot of Square Mileage: Grazing Program
+```{r}
+blm_graze_df %>%
+  filter(!admin_st == "" & !admin_st == " ") %>%
+  ggplot(aes(gis_miles, fill = admin_st)) +
+  geom_boxplot() +
+  theme_bw()
+```
+
+Boxplot of Square Mileage: HMA Program
+```{r}
+blm_hb_df %>%
+  ggplot(aes(total_miles, fill = admin_st)) +
+  geom_boxplot()
+```
+
+
+Boxplot of HMA Horse Populations by state
+
+```{r}
+
+blm_hb_df %>%
+  ggplot(aes(est_horse_pop, fill =  admin_st)) +
+  geom_boxplot() +
+  labs(title = "Total estimated Horse Distribution Summary by State",
+       x = "Estimated Horse Population",
+       y  = "State") +
+  theme_bw()
+```
+
+Total # of  HMAs per state
+
+```{r}
+hb_df  <- blm_hb_df %>%
+  group_by(admin_st) %>%
+  summarise(Num_HMAs = n(),
+            all_hb_miles = sum(total_miles))
+#Plot
+hb_df %>%
+  filter(!admin_st == "" & !admin_st == " ") %>%
+  ggplot(aes(admin_st, Num_HMAs, fill = admin_st)) +
+  geom_col() +
+  theme_bw() +
+  labs(title = "Number of HMAs per State", x = "State", y = " # of HMAs")
+```
+
+Total # of  BLM Grazing Allotments per State
+```{r}
+gr_df  <- blm_graze_df %>%
+  filter(!admin_st == "" & !admin_st == " ") %>%
+  group_by(admin_st) %>%
+  summarise(Num_allots = n(),
+            all_graze_miles = sum(gis_miles))
+#Plot
+gr_df %>%
+  ggplot(aes(admin_st, Num_allots, fill = admin_st)) +
+  geom_col() +
+  theme_bw() +
+  labs(title = "Number of Grazing Allotments per State",
+       x = "State",
+       y = " # of Grazing Allotments")
+```
+```{r}
+df <- left_join(hb_df, gr_df, by = "admin_st")
+```
+
+```{r}
+df %>%
+  ggplot(aes(x = admin_st)) +
+  geom_point(aes(y = Num_HMAs)) +
+  geom_col(aes(y = Num_allots))
+```
+
+```{r}
+df %>%
+  ggplot(aes(x = admin_st, fill = admin_st, alpha = 0.5)) +
+  geom_col(aes(y = all_graze_miles)) +
+  geom_col(aes(y = all_hb_miles)) +
+  geom_point(aes(y = all_hb_miles)) +
+  labs(title = "Grazing Miles v. HMA miles",
+       x = "State", y = "Total Square Miles")
+```
+
